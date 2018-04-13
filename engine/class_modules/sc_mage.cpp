@@ -1958,7 +1958,7 @@ struct frost_mage_spell_t : public mage_spell_t
     }
   }
   
-  void trigger_flurry_cdr( double chance, double cdr_value )
+  void trigger_flurry_cdr( double chance, timespan_t cdr_value )
   {
       if ( rng().roll( chance ) )
         cooldowns.flurry -> adjust( -cdr_value, false );
@@ -3361,7 +3361,7 @@ struct flurry_t : public frost_mage_spell_t
     flurry_bolt( new flurry_bolt_t( p ) )
   {
     cooldown -> charges = 2;
-    cooldown -> duration = 20;
+    cooldown -> duration = timespan_t::from_seconds( 20.0 );
     cooldown -> hasted = true;
   
     parse_options( options_str );
@@ -3468,7 +3468,7 @@ struct frostbolt_t : public frost_mage_spell_t
     
     // I am too bad to make it adjustable
     double flurry_cdr_chance = 0.2;
-    double flurry_cdr_value = 10.0;
+    timespan_t flurry_cdr_value = timespan_t::from_seconds( 10.0 );
     trigger_flurry_cdr( flurry_cdr_chance, flurry_cdr_value );
 
     p() -> buffs.t19_oh_buff -> trigger();
