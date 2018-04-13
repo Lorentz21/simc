@@ -446,6 +446,7 @@ public:
     cooldown_t* frozen_orb;
     cooldown_t* presence_of_mind;
     cooldown_t* time_warp;
+    cooldown_t* flurry;
   } cooldowns;
 
   // Gains
@@ -3360,6 +3361,7 @@ struct flurry_t : public frost_mage_spell_t
     flurry_bolt( new flurry_bolt_t( p ) )
   {
     cooldown -> charges = 2;
+    cooldown -> duration = 20;
     cooldown -> hasted = true;
   
     parse_options( options_str );
@@ -5405,6 +5407,7 @@ mage_t::mage_t( sim_t* sim, const std::string& name, race_e r ) :
   cooldowns.frozen_orb       = get_cooldown( "frozen_orb"       );
   cooldowns.presence_of_mind = get_cooldown( "presence_of_mind" );
   cooldowns.time_warp        = get_cooldown( "time_warp"        );
+  cooldowns.flurry           = get_cooldown( "flurry"           );
 
   // Options
   regen_type = REGEN_DYNAMIC;
