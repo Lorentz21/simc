@@ -1956,6 +1956,12 @@ struct frost_mage_spell_t : public mage_spell_t
       }
     }
   }
+  
+  void trigger_flurry_cdr( double chance, double cdr_value )
+  {
+      if ( rng().roll( chance ) )
+        cooldowns.flurry -> adjust( -cdr_value, false );
+  }
 
   double icicle_sp_coefficient() const
   {
@@ -3353,6 +3359,9 @@ struct flurry_t : public frost_mage_spell_t
     frost_mage_spell_t( "flurry", p, p -> find_specialization_spell( "Flurry" ) ),
     flurry_bolt( new flurry_bolt_t( p ) )
   {
+    cooldown -> charges = 2;
+    cooldown -> hasted = true;
+  
     parse_options( options_str );
     may_miss = false;
     may_crit = affected_by.shatter = false;
@@ -3454,6 +3463,11 @@ struct frostbolt_t : public frost_mage_spell_t
     bf_proc_chance *= 1.0 + p() -> talents.frozen_touch -> effectN( 1 ).percent();
     // TODO: Double check if it interacts this way
     trigger_brain_freeze( bf_proc_chance );
+    
+    // I am too bad to make it adjustable
+    double flurry_cdr_chance = 0.2;
+    double flurry_cdr_value = 10.0;
+    trigger_flurry_cdr( flurry_cdr_chance, flurry_cdr_value );
 
     p() -> buffs.t19_oh_buff -> trigger();
   }
