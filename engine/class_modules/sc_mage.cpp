@@ -3321,20 +3321,18 @@ struct flurry_bolt_t : public frost_mage_spell_t
 
     p() -> state.flurry_bolt_count++;
 
-    if ( p() -> state.brain_freeze_active )
-    {
-      td( s -> target ) -> debuffs.winters_chill -> trigger();
-    }
+    td( s -> target ) -> debuffs.winters_chill -> trigger();
   }
 
   virtual double action_multiplier() const override
   {
     double am = frost_mage_spell_t::action_multiplier();
 
-    if ( p() -> state.brain_freeze_active )
-    {
-      am *= 1.0 + p() -> buffs.brain_freeze -> data().effectN( 2 ).percent();
-    }
+	// Just comment this section since there is no additional damage on proc
+    //if ( p() -> state.brain_freeze_active )
+    //{
+    //  am *= 1.0 + p() -> buffs.brain_freeze -> data().effectN( 2 ).percent();
+    //}
 
     // In-game testing shows that 6 successive Flurry bolt impacts (with no cast
     // in between to reset the counter) results in the following bonus from T20 2pc:
@@ -3383,12 +3381,7 @@ struct flurry_t : public frost_mage_spell_t
 
   virtual timespan_t execute_time() const override
   {
-    if ( p() -> buffs.brain_freeze -> check() )
-    {
-      return timespan_t::zero();
-    }
-
-    return frost_mage_spell_t::execute_time();
+    return timespan_t::zero();
   }
 
   virtual void execute() override
